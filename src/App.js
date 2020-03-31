@@ -87,13 +87,13 @@ const App = () => {
   const DefaultElement = props => {
     return (
       <div className="input-block my-1">
-        <p className="rounded bg-green-600 text-white p-3" {...props.attributes}>{props.children}</p>
+        <p className="rounded bg-blue-300 text-white p-3" {...props.attributes}>{props.children}</p>
       </div>
     )
   }
   return (
     <div
-      className="px-2 py-4"
+      className="px-8 py-4"
     >
       <Slate 
         editor={editor} 
@@ -124,7 +124,7 @@ const ReadOnlyElement = props => {
     <div
       {...props.attributes} 
     >
-      <p className="rounded bg-gray-300 p-3" contentEditable={false}>{props.element.children[0].text}</p>{props.children}
+      <p className="p-3" contentEditable={false}>{props.element.children[0].text}</p>{props.children}
     </div>
   )
 }
@@ -134,7 +134,7 @@ const TranslatedText = props => {
     <div
       {...props.attributes} 
     >
-      {props.element.translatedText.map((text, index) => <p className="rounded bg-blue-300 p-3 translated-block my-1" key={index} contentEditable={false}>{text || ''} </p>)}
+      {props.element.translatedText.map((text, index) => <p className="rounded bg-gray-300 p-3 translated-block my-1" key={index} contentEditable={false}>{text || ''} </p>)}
       {props.children}
     </div>
   )
