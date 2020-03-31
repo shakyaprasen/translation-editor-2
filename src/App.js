@@ -17,14 +17,14 @@ const App = () => {
   editor.isVoid = element => {
     return element.void ? true : isVoid(element);
   };
-  const [translations, setTranslations] = useState({});
+  // const [translations, setTranslations] = useState({});
   // Add the initial value when setting up our state.
   const [value, setValue] = useState([
     {
       paragraphRef: 1,
       type: 'readOnly',
       void: true,
-      children: [{ text: 'A line of text in a paragraph.' }],
+      children: [{ text: 'First line in a paragraph.' }],
     },
     {
       paragraphRef: 1,
@@ -34,7 +34,7 @@ const App = () => {
     {
       paragraphRef: 1,
       type: 'translatedTextPreview',
-      translatedText: '',
+      translatedText: [''],
       void: true,
       children: [{ text: '' }],
     },
@@ -42,7 +42,7 @@ const App = () => {
       paragraphRef: 2,
       type: 'readOnly',
       void: true,
-      children: [{ text: 'A line of text in a paragraph.' }],
+      children: [{ text: 'First Line in second paragraph.' }],
     },
     {
       paragraphRef: 2,
@@ -53,20 +53,20 @@ const App = () => {
       paragraphRef: 2,
       type: 'translatedTextPreview',
       void: true,
-      translatedText: '',
+      translatedText: [''],
       children: [{ text: '' }],
     },
   ]);
 
-  useEffect(() => {
-    const translatedValue = value.reduce((aggregate, textBlock) => {
-      if (textBlock.type === 'translation') {
-        return { ...aggregate, [textBlock.paragraphRef]: convertSentences(textBlock.children[0].text) };
-      }
-      return { ...aggregate };
-    }, {});
-    setTranslations(translatedValue);
-  },[value])
+  // useEffect(() => {
+  //   const translatedValue = value.reduce((aggregate, textBlock) => {
+  //     if (textBlock.type === 'translation') {
+  //       return { ...aggregate, [textBlock.paragraphRef]: convertSentences(textBlock.children[0].text) };
+  //     }
+  //     return { ...aggregate };
+  //   }, {});
+  //   setTranslations(translatedValue);
+  // },[value])
 
   const convertSentences = sentence => {
     return sentence.split(" ").map(word => convert(word)).join(" ");
@@ -99,12 +99,11 @@ const App = () => {
         const translations = value.filter(textBlock => textBlock.type === "translation");
         const changedValue = value.map(textBlock => {
           if(textBlock.type === "translatedTextPreview") {
-            const text = translations.find(block => block.paragraphRef === textBlock.paragraphRef).children[0].text;
-            return { ...textBlock, translatedText: convertSentences(text) };
+            const blocks = translations.filter(block => block.paragraphRef === textBlock.paragraphRef);
+            return { ...textBlock, translatedText: blocks.map(block => convertSentences(block.children[0].text)) };
           }
           return textBlock;
         });
-        console.log(changedValue);
         setValue(changedValue);
       }}
     >
@@ -127,7 +126,8 @@ const ReadOnlyElement = props => {
 const TranslatedText = props => {
   return (
     <div {...props.attributes} >
-      <p contentEditable={false}>{props.element.translatedText ? props.element.translatedText : ' '}</p>{props.children}
+      {props.element.translatedText.map((text, index) => <p key={index} contentEditable={false}>{text || ''} </p>)}
+      {props.children}
     </div>
   )
 }
