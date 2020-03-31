@@ -10912,6 +10912,10 @@ video {
   transition-duration: 1000ms;
 }
 
+.input-block + .input-block, .translated-block + .translated-block {
+  margin-top: -15px;
+}
+
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;

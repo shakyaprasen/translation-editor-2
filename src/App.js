@@ -86,53 +86,55 @@ const App = () => {
 
   const DefaultElement = props => {
     return (
-      <div>
-        <p {...props.attributes}>{props.children}</p>
+      <div className="input-block my-1">
+        <p className="rounded bg-green-600 text-white p-3" {...props.attributes}>{props.children}</p>
       </div>
     )
   }
   return (
-    <Slate 
-      editor={editor} 
-      value={value} 
-      onChange={value => {
-        const translations = value.filter(textBlock => textBlock.type === "translation");
-        const changedValue = value.map(textBlock => {
-          if(textBlock.type === "translatedTextPreview") {
-            const blocks = translations.filter(block => block.paragraphRef === textBlock.paragraphRef);
-            return { ...textBlock, translatedText: blocks.map(block => convertSentences(block.children[0].text)) };
-          }
-          return textBlock;
-        });
-        setValue(changedValue);
-      }}
+    <div
+      className="px-2 py-4"
     >
-      <button
-        onClick={e => console.log('clicked')}
-        className="px-2 py-1 rounded-lg bg-green-400 text-green-800 text-xl font-light uppercase shadow-md hover:shadow-lg"
+      <Slate 
+        editor={editor} 
+        value={value} 
+        onChange={value => {
+          const translations = value.filter(textBlock => textBlock.type === "translation");
+          const changedValue = value.map(textBlock => {
+            if(textBlock.type === "translatedTextPreview") {
+              const blocks = translations.filter(block => block.paragraphRef === textBlock.paragraphRef);
+              return { ...textBlock, translatedText: blocks.map(block => convertSentences(block.children[0].text)) };
+            }
+            return textBlock;
+          });
+          setValue(changedValue);
+        }}
       >
-        Testing Button
-      </button>
-      <Editable 
-        renderElement={renderElement}
-      />
-    </Slate>
+        <Editable 
+          renderElement={renderElement}
+        />
+      </Slate>
+    </div>
   )
 };
 
 
 const ReadOnlyElement = props => {
   return (
-    <div {...props.attributes} >
-      <p contentEditable={false}>{props.element.children[0].text}</p>{props.children}
+    <div
+      {...props.attributes} 
+    >
+      <p className="rounded bg-gray-300 p-3" contentEditable={false}>{props.element.children[0].text}</p>{props.children}
     </div>
   )
 }
 
 const TranslatedText = props => {
   return (
-    <div {...props.attributes} >
-      {props.element.translatedText.map((text, index) => <p key={index} contentEditable={false}>{text || ''} </p>)}
+    <div
+      {...props.attributes} 
+    >
+      {props.element.translatedText.map((text, index) => <p className="rounded bg-blue-300 p-3 translated-block my-1" key={index} contentEditable={false}>{text || ''} </p>)}
       {props.children}
     </div>
   )

@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.input-block + .input-block, .translated-block + .translated-block {
+  margin-top: -15px;
+}
